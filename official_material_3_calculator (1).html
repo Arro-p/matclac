@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Material 3 Official Calculator</title>
+    
+    <!-- Official Material Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    
+    <!-- Official Material Web Components -->
+    <script type="module" src="https://esm.run/@material/web/all.js"></script>
+
+    <style>
+        :root {
+            --font-stack: 'Roboto', system-ui, sans-serif;
+            --nav-width: 90px;
+        }
+
+        /* 
+           Base Theme Mappings 
+           (These update when JS changes the data-theme and data-palette)
+        */
+        body {
+            /* Default Violet - Dark */
+            --md-sys-color-primary: #D0BCFF;
+            --md-sys-color-on-primary: #381E72;
+            --md-sys-color-primary-container: #4F378B;
+            --md-sys-color-on-primary-container: #EADDFF;
+            --md-sys-color-secondary: #CCC2DC;
+            --md-sys-color-on-secondary: #332D41;
+            --md-sys-color-secondary-container: #4A4458;
+            --md-sys-color-on-secondary-container: #E8DEF8;
+            --md-sys-color-tertiary-container: #4D4357;
+            --md-sys-color-on-tertiary-container: #EFE4F9;
+            --md-sys-color-background: #141218;
+            --md-sys-color-on-background: #E6E0E9;
+            --md-sys-color-surface: #141218;
+            --md-sys-color-surface-container-low: #1D1B20;
+            --md-sys-color-surface-container: #211F26;
+            --md-sys-color-surface-container-high: #2B2930;
+            --md-sys-color-surface-container-highest: #36343B;
+            --md-sys-color-on-surface: #E6E0E9;
+            --md-sys-color-on-surface-variant: #CAC4D0;
+            --md-sys-color-outline: #938F99;
+            --md-sys-color-error: #FFB4AB;
+            --md-sys-color-error-container: #93000A;
+            --md-sys-color-on-error-container: #FFDAD6;
+
+            font-family: var(--font-stack);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* LIGHT MODE OVERRIDES */
+        body[data-theme="light"] {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-secondary: #625B71;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-on-secondary-container: #1D192B;
+            --md-sys-color-tertiary-container: #F1D4FA;
+            --md-sys-color-on-tertiary-container: #2A1332;
+            --md-sys-color-background: #FEF7FF;
+            --md-sys-color-on-background: #1D1B20;
+            --md-sys-color-surface: #FEF7FF;
+            --md-sys-color-surface-container-low: #F7F2FA;
+            --md-sys-color-surface-container: #F3EDF7;
+            --md-sys-color-surface-container-high: #ECE6F0;
+            --md-sys-color-surface-container-highest: #E6E0E9;
+            --md-sys-color-on-surface: #1D1B20;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-error: #B3261E;
+            --md-sys-color-error-container: #F9DEDC;
+            --md-sys-color-on-error-container: #410E0B;
+        }
+
+        /* PALETTES */
+        /* Glacier (Blue) */
+        body[data-palette="glacier"][data-theme="dark"] {
+            --md-sys-color-primary: #9ECAFF; --md-sys-color-primary-container: #004A77; --md-sys-color-on-primary-container: #D1E4FF;
+            --md-sys-color-secondary-container: #3E4759; --md-sys-color-on-secondary-container: #D7E3FF;
+            --md-sys-color-background: #111418; --md-sys-color-surface-container: #1D2024; --md-sys-color-surface-container-high: #282A2F;
+        }
+        body[data-palette="glacier"][data-theme="light"] {
+            --md-sys-color-primary: #0061A4; --md-sys-color-primary-container: #D1E4FF; --md-sys-color-on-primary-container: #001D36;
+            --md-sys-color-secondary-container: #D7E3FF; --md-sys-color-on-secondary-container: #001B3F;
+            --md-sys-color-background: #FDFBFF; --md-sys-color-surface-container: #F1F4F9; --md-sys-color-surface-container-high: #E6E8EE;
+        }
+
+        /* Grass (Green) */
+        body[data-palette="grass"][data-theme="dark"] {
+            --md-sys-color-primary: #7EDBA9; --md-sys-color-primary-container: #005234; --md-sys-color-on-primary-container: #9AF8C4;
+            --md-sys-color-secondary-container: #334B3D; --md-sys-color-on-secondary-container: #CEE9D5;
+            --md-sys-color-background: #101411; --md-sys-color-surface-container: #1C201D; --md-sys-color-surface-container-high: #272B28;
+        }
+        body[data-palette="grass"][data-theme="light"] {
+            --md-sys-color-primary: #006D47; --md-sys-color-primary-container: #9AF8C4; --md-sys-color-on-primary-container: #002112;
+            --md-sys-color-secondary-container: #CEE9D5; --md-sys-color-on-secondary-container: #0B2014;
+            --md-sys-color-background: #FBFDF8; --md-sys-color-surface-container: #EFEFEA; --md-sys-color-surface-container-high: #E3E3DE;
+        }
+
+        * { box-sizing: border-box; }
+        
+        .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+        
+        /* Navigation Rail (Official M3 style) */
+        .side-nav {
+            width: var(--nav-width);
+            background-color: var(--md-sys-color-surface);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 0;
+            gap: 16px;
+            z-index: 10;
+        }
+        .bottom-nav { display: none; background-color: var(--md-sys-color-surface-container); z-index: 10; width: 100%; justify-content: space-evenly; align-items: center; padding-bottom: max(16px, env(safe-area-inset-bottom)); padding-top: 12px; }
+        
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: none; border: none; cursor: pointer; color: var(--md-sys-color-on-surface-variant);
+            font-family: inherit; width: 72px; gap: 4px;
+        }
+        .nav-indicator {
+            width: 56px; height: 32px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .nav-item span { font-size: 12px; font-weight: 500; letter-spacing: 0.5px; opacity: 0.8; }
+        
+        .nav-item:hover .nav-indicator { background-color: var(--md-sys-color-surface-container-highest); }
+        .nav-item.active { color: var(--md-sys-color-on-surface); }
+        .nav-item.active .nav-indicator {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+        .nav-item.active span { font-weight: 700; opacity: 1; }
+
+        .workspace { flex: 1; position: relative; display: flex; flex-direction: column; overflow: hidden; background-color: var(--md-sys-color-surface-container-low); border-radius: 32px 0 0 32px; }
+        @media (max-width: 768px) { .workspace { border-radius: 0; } }
+
+        /* Sections */
+        .view-section { display: none; flex-direction: column; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 24px; animation: fadeIn 0.3s ease; }
+        .view-section.active { display: flex; }
+        .view-section:not(.active) { display: none !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        #calculator { max-width: 1000px; margin: 0 auto; width: 100%; }
+        
+        .calc-display {
+            flex: 0 0 auto; 
+            background-color: var(--md-sys-color-surface-container);
+            border-radius: 32px; padding: 24px 32px 16px 32px; margin-bottom: 24px;
+            display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end;
+            position: relative;
+        }
+        .calc-status { position: absolute; top: 20px; left: 24px; font-size: 1rem; font-weight: 500; color: var(--md-sys-color-on-surface-variant); display: flex; gap: 16px; }
+        .calc-expr { font-size: 1.5rem; color: var(--md-sys-color-on-surface-variant); text-align: right; margin-bottom: 8px; font-weight: 400; width: 100%; min-width: 0; min-height: 24px; white-space: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; padding-bottom: 4px; }
+        .calc-expr::-webkit-scrollbar { display: none; }
+        .calc-res { 
+            font-size: 5rem; 
+            font-weight: 400; 
+            color: var(--md-sys-color-on-surface); 
+            line-height: 1.1; 
+            width: 100%; 
+            min-width: 0; 
+            overflow-x: auto; 
+            overflow-y: hidden; 
+            white-space: nowrap; 
+            text-align: right; 
+            letter-spacing: -1px; 
+            scrollbar-width: none; 
+            padding-bottom: 8px;
+            padding-top: 8px;
+            flex-shrink: 0; 
+        }
+        .calc-res::-webkit-scrollbar { display: none; }
+
+        .keypad-container { flex: 1; display: flex; gap: 16px; min-height: 0; justify-content: center; }
+        .keypad { display: grid; flex: 1; height: 100%; gap: 12px; }
+        .std-keypad { grid-template-columns: repeat(4, 1fr); grid-template-rows: auto repeat(5, 1fr); max-width: 500px; }
+        .sci-keypad { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); display: none; max-width: 500px; }
+
+        /* Memory Row using MWC */
+        .mem-row { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+        .mem-row md-text-button { flex: 1; --md-text-button-label-text-color: var(--md-sys-color-on-surface-variant); }
+
+        /* Official Button Overrides */
+        .btn-wrapper { width: 100%; height: 100%; display: flex; }
+        .btn-wrapper md-filled-tonal-button, 
+        .btn-wrapper md-filled-button {
+            width: 100%; height: 100%;
+            /* Make text huge for calculator */
+            --md-sys-typescale-label-large-size: 1.8rem;
+            --md-sys-typescale-label-large-font: var(--font-stack);
+            --md-filled-tonal-button-container-shape: var(--btn-shape-val, 9999px);
+            --md-filled-button-container-shape: var(--btn-shape-val, 9999px);
+        }
+        
+        .btn-num-zero { grid-column: span 2; }
+        
+        /* Map Android Calculator Colors */
+        .btn-op { 
+            --md-filled-tonal-button-container-color: var(--md-sys-color-primary-container); 
+            --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-primary-container);
+        }
+        .btn-ac {
+            --md-filled-tonal-button-container-color: var(--md-sys-color-tertiary-container);
+            --md-filled-tonal-button-label-text-color: var(--md-sys-color-on-tertiary-container);
+        }
+        .btn-sci {
+            --md-sys-typescale-label-large-size: 1.1rem;
+            --md-filled-tonal-button-container-color: var(--md-sys-color-surface-container-high);
+        }
+        .btn-eq {
+            /* Equals is fully primary */
+            --md-filled-button-container-color: var(--md-sys-color-primary);
+        }
+
+        .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding: 0 16px; }
+        .panel-header h2 { font-size: 2rem; font-weight: 400; color: var(--md-sys-color-on-surface); margin: 0; }
+        
+        .card { background-color: var(--md-sys-color-surface-container); border-radius: 24px; padding: 24px; margin-bottom: 24px; max-width: 800px; margin-left: auto; margin-right: auto; width: 100%; }
+        
+        md-outlined-text-field, md-outlined-select { width: 100%; margin-bottom: 16px; }
+        
+        .result-box {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            padding: 24px; border-radius: 16px; font-size: 1.5rem; font-weight: 500;
+            display: flex; justify-content: center; align-items: center; text-align: center;
+        }
+
+        .swap-container { display: flex; justify-content: center; margin: -8px 0 16px 0; z-index: 2; position: relative; }
+        
+        /* Palettes Grid */
+        .palette-options { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+        .palette-btn { width: 48px; height: 48px; border-radius: 50%; border: none; cursor: pointer; transition: transform 0.2s; position: relative; }
+        .palette-btn::after { content: ''; position: absolute; inset: -4px; border: 2px solid transparent; border-radius: 50%; transition: border-color 0.2s; }
+        .palette-btn:hover { transform: scale(1.1); }
+        .palette-btn.selected::after { border-color: var(--md-sys-color-primary); }
+
+        /* History List */
+        md-list { background: transparent; max-width: 800px; margin: 0 auto; width: 100%; --md-list-container-color: transparent; }
+        md-list-item { --md-list-item-container-color: var(--md-sys-color-surface-container); border-radius: 16px; margin-bottom: 8px; cursor: pointer; }
+        
+        @media (min-width: 1024px) {
+            .view-section { padding: 40px; }
+            .sci-keypad { display: grid; flex: 1; }
+            #toggle-sci-btn { display: none; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1023px) {
+            .sci-keypad { display: grid; flex: 1; }
+            #toggle-sci-btn { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .side-nav { display: none; }
+            .bottom-nav { display: flex; }
+            .workspace { border-radius: 0; }
+            .calc-display { padding: 24px 24px 12px 24px; margin-bottom: 16px; }
+            .calc-res { font-size: 4rem; }
+            .keypad-container { flex-direction: column; }
+            .std-keypad { flex: 1; height: 100%; max-width: none; }
+            .sci-keypad { grid-template-columns: repeat(4, 1fr); display: none; flex: none; max-width: none; }
+            .sci-keypad.visible { display: grid; }
+        }
+
+        @media (max-height: 700px) {
+            .calc-display { padding: 16px 16px 8px 16px; margin-bottom: 12px; }
+            .calc-res { font-size: 3.5rem; }
+            .btn-wrapper md-filled-tonal-button { --md-sys-typescale-label-large-size: 1.4rem; }
+        }
+
+        /* Basic Mode Override */
+        [data-calc-mode="basic"] .sci-keypad { display: none !important; }
+        [data-calc-mode="basic"] #toggle-sci-btn { display: none !important; }
+        [data-calc-mode="basic"] .keypad-container { justify-content: center; max-width: 400px; margin: 0 auto; }
+        
+        /* Dynamic Button Shapes */
+        [data-btn-shape="pill"] { --btn-shape-val: 9999px; }
+        [data-btn-shape="circle"] { --btn-shape-val: 50%; }
+        [data-btn-shape="circle"] .btn-num-zero md-filled-tonal-button { --md-filled-tonal-button-container-shape: 9999px; }
+        [data-btn-shape="rounded"] { --btn-shape-val: 16px; }
+        [data-btn-shape="square"] { --btn-shape-val: 4px; }
+        
+        /* Hidden UI utilities */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-theme="dark" data-palette="violet" data-calc-mode="scientific" data-btn-shape="pill">
+
+    <div class="app-container">
+        
+        <nav class="side-nav">
+            <button class="nav-item active" data-target="calculator">
+                <div class="nav-indicator"><md-icon>calculate</md-icon></div>
+                <span>Calc</span>
+            </button>
+            <button class="nav-item" data-target="converter">
+                <div class="nav-indicator"><md-icon>swap_horiz</md-icon></div>
+                <span>Units</span>
+            </button>
+            <button class="nav-item" data-target="currency">
+                <div class="nav-indicator"><md-icon>payments</md-icon></div>
+                <span>Money</span>
+            </button>
+            <button class="nav-item" data-target="programmer">
+                <div class="nav-indicator"><md-icon>terminal</md-icon></div>
+                <span>Code</span>
+            </button>
+            <button class="nav-item" data-target="history">
+                <div class="nav-indicator"><md-icon>history</md-icon></div>
+                <span>History</span>
+            </button>
+            <button class="nav-item" data-target="settings">
+                <div class="nav-indicator"><md-icon>settings</md-icon></div>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <main class="workspace">
+            
+            <section id="calculator" class="view-section active">
+                <div class="calc-display">
+                    <div class="calc-status">
+                        <span id="angle-mode-indicator">DEG</span>
+                        <span id="memory-indicator"></span>
+                    </div>
+                    <div class="calc-expr" id="calc-expression"></div>
+                    <div class="calc-res" id="calc-result">0</div>
+                </div>
+
+                <div class="keypad-container">
+                    <!-- Scientific Keypad -->
+                    <div class="keypad sci-keypad" id="sci-keypad">
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="setAngleMode('DEG')">deg</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="setAngleMode('RAD')">rad</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('(')">(</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc(')')">)</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('sin(')">sin</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('cos(')">cos</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('tan(')">tan</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('^')">xʸ</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('sqrt(')">√</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('ln(')">ln</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('log(')">log</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('!')">x!</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('π')">π</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('e')">e</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('inv')">1/x</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="inputFunc('ans')">ans</md-filled-tonal-button></div>
+                    </div>
+
+                    <!-- Standard Keypad -->
+                    <div class="keypad std-keypad">
+                        <div class="mem-row">
+                            <md-text-button onclick="memoryAction('MC')">MC</md-text-button>
+                            <md-text-button onclick="memoryAction('MR')">MR</md-text-button>
+                            <md-text-button onclick="memoryAction('M+')">M+</md-text-button>
+                            <md-text-button onclick="memoryAction('M-')">M-</md-text-button>
+                            <md-icon-button id="toggle-sci-btn"><md-icon>science</md-icon></md-icon-button>
+                        </div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-ac" onclick="clearAll()">AC</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="backspace()"><md-icon>backspace</md-icon></md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="inputFunc('%')">%</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="inputFunc('/')">÷</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('7')">7</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('8')">8</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('9')">9</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="inputFunc('*')">×</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('4')">4</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('5')">5</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('6')">6</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="inputFunc('-')">−</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('1')">1</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('2')">2</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('3')">3</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="inputFunc('+')">+</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper btn-num-zero"><md-filled-tonal-button onclick="inputFunc('0')">0</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputFunc('.')">.</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-button class="btn-eq" onclick="calculate()">=</md-filled-button></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="converter" class="view-section">
+                <div class="panel-header">
+                    <h2>Unit Converter</h2>
+                </div>
+                <div class="card">
+                    <md-outlined-select id="conv-category" label="Category"></md-outlined-select>
+                    
+                    <div id="standard-conv-ui">
+                        <md-outlined-text-field id="conv-input" label="Amount" type="number" value="1"></md-outlined-text-field>
+                        <md-outlined-select id="conv-unit-from" label="From"></md-outlined-select>
+                        
+                        <div class="swap-container">
+                            <md-fab size="small" variant="secondary" onclick="swapConvUnits()" aria-label="Swap"><md-icon slot="icon">swap_vert</md-icon></md-fab>
+                        </div>
+                        
+                        <md-outlined-select id="conv-unit-to" label="To"></md-outlined-select>
+                        <div class="result-box" id="conv-result">0</div>
+                    </div>
+
+                    <div id="date-conv-ui" class="hidden">
+                        <md-outlined-text-field id="date-start" label="Start Date" type="date"></md-outlined-text-field>
+                        <md-outlined-text-field id="date-end" label="End Date" type="date"></md-outlined-text-field>
+                        <div class="result-box" id="date-result" style="flex-direction: column;">0 days</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="currency" class="view-section">
+                <div class="panel-header">
+                    <h2>Exchange Rates</h2>
+                </div>
+                <div class="card">
+                    <p id="currency-date" style="color: var(--md-sys-color-on-surface-variant); margin-top: 0;">Loading...</p>
+                    
+                    <md-outlined-text-field id="curr-input" label="Amount" type="number" value="1"></md-outlined-text-field>
+                    <md-outlined-select id="curr-from" label="From Currency"></md-outlined-select>
+                    
+                    <div class="swap-container">
+                        <md-fab size="small" variant="secondary" onclick="swapCurrencies()" aria-label="Swap"><md-icon slot="icon">swap_vert</md-icon></md-fab>
+                    </div>
+                    
+                    <md-outlined-select id="curr-to" label="To Currency"></md-outlined-select>
+                    <div class="result-box" id="curr-result">Loading...</div>
+                    
+                    <md-filled-tonal-button style="width: 100%; margin-top: 24px;" onclick="fetchCurrencyRates(true)">Refresh Live Rates</md-filled-tonal-button>
+                </div>
+            </section>
+
+            <section id="programmer" class="view-section">
+                <div class="panel-header">
+                    <h2>Programmer</h2>
+                </div>
+                <div class="card" style="padding: 16px; margin-bottom: 16px;">
+                    <md-list>
+                        <md-list-item id="pb-16" onclick="setProgBase(16)">
+                            <div slot="headline">HEX</div>
+                            <div slot="end" id="pv-16" style="font-family: monospace; font-size: 1.2rem;">0</div>
+                        </md-list-item>
+                        <md-list-item id="pb-10" onclick="setProgBase(10)" class="active-base" style="background: var(--md-sys-color-secondary-container); border-radius: 12px;">
+                            <div slot="headline">DEC</div>
+                            <div slot="end" id="pv-10" style="font-family: monospace; font-size: 1.2rem;">0</div>
+                        </md-list-item>
+                        <md-list-item id="pb-8" onclick="setProgBase(8)">
+                            <div slot="headline">OCT</div>
+                            <div slot="end" id="pv-8" style="font-family: monospace; font-size: 1.2rem;">0</div>
+                        </md-list-item>
+                        <md-list-item id="pb-2" onclick="setProgBase(2)">
+                            <div slot="headline">BIN</div>
+                            <div slot="end" id="pv-2" style="font-family: monospace; font-size: 1.2rem; word-break: break-all; max-width: 200px;">0</div>
+                        </md-list-item>
+                    </md-list>
+                    <div class="calc-expr" id="prog-expression" style="margin-top: 16px;"></div>
+                    <div class="calc-res" id="prog-result" style="font-size: 3rem;">0</div>
+                </div>
+
+                <div class="keypad-container" style="flex: none; height: 400px;">
+                    <div class="keypad" style="grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); max-width: 600px;">
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('AND')">AND</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('OR')">OR</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('XOR')">XOR</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-ac" onclick="progClear()">AC</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-op" onclick="progBackspace()"><md-icon>backspace</md-icon></md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('<<')">LSH</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('>>')">RSH</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="btn-sci" onclick="progOp('NOT')">NOT</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('A')">A</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('B')">B</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin" onclick="inputProg('7')">7</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin prog-nonoct" onclick="inputProg('8')">8</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin prog-nonoct" onclick="inputProg('9')">9</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('C')">C</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('D')">D</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin" onclick="inputProg('4')">4</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin" onclick="inputProg('5')">5</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-nonbin" onclick="inputProg('6')">6</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('E')">E</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button class="prog-hex-only" onclick="inputProg('F')">F</md-filled-tonal-button></div>
+
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputProg('1')">1</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputProg('2')">2</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputProg('3')">3</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-tonal-button onclick="inputProg('0')">0</md-filled-tonal-button></div>
+                        <div class="btn-wrapper"><md-filled-button class="btn-eq" onclick="progCalculate()">=</md-filled-button></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="history" class="view-section">
+                <div class="panel-header">
+                    <h2>History</h2>
+                    <md-text-button onclick="clearHistory()">Clear All</md-text-button>
+                </div>
+                <md-list id="history-list"></md-list>
+            </section>
+
+            <section id="settings" class="view-section">
+                <div class="panel-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="card">
+                    <md-outlined-select id="theme-mode" label="Theme Mode">
+                        <md-select-option value="system"><div slot="headline">System Default</div></md-select-option>
+                        <md-select-option value="light"><div slot="headline">Light Mode</div></md-select-option>
+                        <md-select-option value="dark"><div slot="headline">Dark Mode</div></md-select-option>
+                    </md-outlined-select>
+
+                    <p style="color: var(--md-sys-color-on-surface-variant); font-size: 0.9rem; margin-top: 16px;">Material Dynamic Palette</p>
+                    <div class="palette-options" style="margin-bottom: 24px;">
+                        <button class="palette-btn" style="background-color: #6750A4" onclick="changePalette('violet')" aria-label="Violet"></button>
+                        <button class="palette-btn" style="background-color: #006399" onclick="changePalette('glacier')" aria-label="Glacier"></button>
+                        <button class="palette-btn" style="background-color: #196D33" onclick="changePalette('grass')" aria-label="Grass"></button>
+                    </div>
+
+                    <md-outlined-select id="calc-mode" label="Calculator Mode">
+                        <md-select-option value="scientific"><div slot="headline">Standard & Scientific</div></md-select-option>
+                        <md-select-option value="basic"><div slot="headline">Standard Only</div></md-select-option>
+                    </md-outlined-select>
+
+                    <md-outlined-select id="btn-shape" label="Button Shape" style="margin-top: 16px;">
+                        <md-select-option value="pill"><div slot="headline">Fully Rounded (Pill)</div></md-select-option>
+                        <md-select-option value="circle"><div slot="headline">Circle</div></md-select-option>
+                        <md-select-option value="rounded"><div slot="headline">Rounded Rect</div></md-select-option>
+                        <md-select-option value="square"><div slot="headline">Square</div></md-select-option>
+                    </md-outlined-select>
+                    
+                    <md-outlined-select id="setting-angle" label="Angle Mode" style="margin-top: 16px;">
+                        <md-select-option value="DEG"><div slot="headline">Degrees (DEG)</div></md-select-option>
+                        <md-select-option value="RAD"><div slot="headline">Radians (RAD)</div></md-select-option>
+                    </md-outlined-select>
+                </div>
+            </section>
+
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="calculator">
+                <div class="nav-indicator"><md-icon>calculate</md-icon></div>
+                <span>Calc</span>
+            </button>
+            <button class="nav-item" data-target="converter">
+                <div class="nav-indicator"><md-icon>swap_horiz</md-icon></div>
+                <span>Units</span>
+            </button>
+            <button class="nav-item" data-target="currency">
+                <div class="nav-indicator"><md-icon>payments</md-icon></div>
+                <span>Money</span>
+            </button>
+            <button class="nav-item" data-target="programmer">
+                <div class="nav-indicator"><md-icon>terminal</md-icon></div>
+                <span>Code</span>
+            </button>
+            <button class="nav-item" data-target="history">
+                <div class="nav-indicator"><md-icon>history</md-icon></div>
+                <span>History</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        let currentExpr = "";
+        let ans = 0;
+        let memory = 0;
+        let angleMode = "DEG";
+        let history = JSON.parse(localStorage.getItem('calc_history')) || [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initSettingsUI();
+            renderHistory();
+            updateMemoryIndicator();
+            updateAngleIndicator();
+            
+            // Setup MWC Event Listeners for Selects
+            document.getElementById('conv-category').addEventListener('change', handleCategoryChange);
+            document.getElementById('conv-unit-from').addEventListener('change', doConversion);
+            document.getElementById('conv-unit-to').addEventListener('change', doConversion);
+            document.getElementById('conv-input').addEventListener('input', doConversion);
+            
+            document.getElementById('date-start').addEventListener('input', doDateConversion);
+            document.getElementById('date-end').addEventListener('input', doDateConversion);
+            
+            document.getElementById('curr-from').addEventListener('change', fetchCurrencyRates);
+            document.getElementById('curr-to').addEventListener('change', doCurrencyConversion);
+            document.getElementById('curr-input').addEventListener('input', doCurrencyConversion);
+
+            document.getElementById('theme-mode').addEventListener('change', (e) => changeTheme(e.target.value));
+            document.getElementById('calc-mode').addEventListener('change', (e) => changeCalcMode(e.target.value));
+            document.getElementById('btn-shape').addEventListener('change', (e) => changeBtnShape(e.target.value));
+            document.getElementById('setting-angle').addEventListener('change', (e) => setAngleMode(e.target.value));
+
+            // Init Dates
+            document.getElementById('date-start').value = new Date().toISOString().split('T')[0];
+            let tmrw = new Date(); tmrw.setDate(tmrw.getDate() + 1);
+            document.getElementById('date-end').value = tmrw.toISOString().split('T')[0];
+
+            populateConvCategories();
+        });
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const views = document.querySelectorAll('.view-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const target = item.getAttribute('data-target');
+                views.forEach(v => v.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+                
+                navItems.forEach(nav => {
+                    if (nav.getAttribute('data-target') === target) nav.classList.add('active');
+                    else nav.classList.remove('active');
+                });
+            });
+        });
+
+        const sciToggleBtn = document.getElementById('toggle-sci-btn');
+        const sciKeypad = document.getElementById('sci-keypad');
+        if(sciToggleBtn) sciToggleBtn.addEventListener('click', () => sciKeypad.classList.toggle('visible'));
+
+        function initSettingsUI() {
+            const savedTheme = localStorage.getItem('calc_theme') || 'dark';
+            document.getElementById('theme-mode').value = savedTheme;
+            changeTheme(savedTheme);
+
+            const savedPalette = localStorage.getItem('calc_palette') || 'violet';
+            applyPalette(savedPalette);
+
+            const savedMode = localStorage.getItem('calc_mode') || 'scientific';
+            document.getElementById('calc-mode').value = savedMode;
+            changeCalcMode(savedMode);
+
+            const savedShape = localStorage.getItem('btn_shape') || 'pill';
+            document.getElementById('btn-shape').value = savedShape;
+            changeBtnShape(savedShape);
+
+            document.getElementById('setting-angle').value = angleMode;
+        }
+
+        function changeTheme(mode) {
+            localStorage.setItem('calc_theme', mode);
+            if (mode === 'system') {
+                const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            } else {
+                document.body.setAttribute('data-theme', mode);
+            }
+        }
+
+        function changePalette(color) {
+            localStorage.setItem('calc_palette', color);
+            applyPalette(color);
+        }
+
+        function applyPalette(color) {
+            document.body.setAttribute('data-palette', color);
+            document.querySelectorAll('.palette-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelectorAll('.palette-btn').forEach(b => { 
+                if(b.getAttribute('onclick').includes(color)) b.classList.add('selected') 
+            });
+        }
+
+        function changeCalcMode(val) {
+            localStorage.setItem('calc_mode', val);
+            document.body.setAttribute('data-calc-mode', val);
+            if(val === 'basic' && sciKeypad) sciKeypad.classList.remove('visible');
+        }
+
+        function changeBtnShape(val) {
+            localStorage.setItem('btn_shape', val);
+            document.body.setAttribute('data-btn-shape', val);
+        }
+
+        function tokenize(expr) {
+            expr = expr.replace(/,/g, '');
+            const regex = /\s*([A-Za-z]+|[0-9]*\.?[0-9]+|\S)\s*/g;
+            let tokens = []; let match;
+            while ((match = regex.exec(expr)) !== null) tokens.push(match[1]);
+            return tokens;
+        }
+
+        class Parser {
+            constructor(tokens, isDeg) { this.tokens = tokens; this.pos = 0; this.isDeg = isDeg; }
+            peek() { return this.tokens[this.pos]; }
+            consume() { return this.tokens[this.pos++]; }
+
+            parse() {
+                if (this.tokens.length === 0) return "";
+                let res = this.parseExpression();
+                if (this.pos < this.tokens.length) throw new Error("Syntax Error");
+                return res;
+            }
+
+            parseExpression() {
+                let val = this.parseTerm();
+                while (this.peek() === '+' || this.peek() === '-' || this.peek() === '−') {
+                    let op = this.consume();
+                    let nextVal = this.parseTerm();
+                    val = (op === '+') ? val + nextVal : val - nextVal;
+                }
+                return val;
+            }
+
+            parseTerm() {
+                let val = this.parseFactor();
+                while (this.peek() === '*' || this.peek() === '×' || this.peek() === '/' || this.peek() === '÷') {
+                    let op = this.consume();
+                    let nextVal = this.parseFactor();
+                    if (op === '*' || op === '×') val *= nextVal;
+                    else {
+                        if (nextVal === 0) throw new Error("Divide by Zero");
+                        val /= nextVal;
+                    }
+                }
+                return val;
+            }
+
+            parseFactor() {
+                let val = this.parsePower();
+                if (this.peek() === '%') { this.consume(); val = val / 100; }
+                return val;
+            }
+
+            parsePower() {
+                let val = this.parsePrimary();
+                if (this.peek() === '^') { this.consume(); val = Math.pow(val, this.parseFactor()); }
+                return val;
+            }
+
+            parsePrimary() {
+                let token = this.consume();
+                if (!token) throw new Error("Incomplete");
+                if (token === '-' || token === '−') return -this.parsePrimary();
+                if (token === '+') return this.parsePrimary();
+                if (token.toLowerCase() === 'pi' || token === 'π') return Math.PI;
+                if (token.toLowerCase() === 'e') return Math.E;
+                if (token.toLowerCase() === 'ans') return ans;
+                if (!isNaN(parseFloat(token))) return parseFloat(token);
+
+                if (token === '(') {
+                    let val = this.parseExpression();
+                    if (this.consume() !== ')') throw new Error("Missing ')'");
+                    return val;
+                }
+
+                const fns = {
+                    'sin': (x) => Math.sin(this.isDeg ? x * Math.PI / 180 : x),
+                    'cos': (x) => Math.cos(this.isDeg ? x * Math.PI / 180 : x),
+                    'tan': (x) => Math.tan(this.isDeg ? x * Math.PI / 180 : x),
+                    'log': (x) => { if(x<=0) throw new Error("Domain Err"); return Math.log10(x); },
+                    'ln': (x) => { if(x<=0) throw new Error("Domain Err"); return Math.log(x); },
+                    'sqrt': (x) => { if(x<0) throw new Error("Domain Err"); return Math.sqrt(x); },
+                    'inv': (x) => { if(x===0) throw new Error("Div by 0"); return 1/x; }
+                };
+
+                if (fns[token.toLowerCase()]) {
+                    let funcName = token.toLowerCase();
+                    if (this.peek() !== '(') throw new Error(`Expected '(' after ${funcName}`);
+                    this.consume(); 
+                    let val = this.parseExpression();
+                    if (this.consume() !== ')') throw new Error("Missing ')'");
+                    return fns[funcName](val);
+                }
+                throw new Error("Invalid");
+            }
+        }
+
+        function factorial(n) {
+            if (n < 0 || n % 1 !== 0) throw new Error("Domain Err");
+            if (n === 0) return 1;
+            let r = 1; for(let i = 1; i <= n; i++) r *= i;
+            return r;
+        }
+
+        const displayExpr = document.getElementById('calc-expression');
+        const displayRes = document.getElementById('calc-result');
+
+        function updateDisplay() {
+            let visualExpr = currentExpr.replace(/\d+(\.\d+)?/g, match => {
+                let parts = match.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                return parts.join('.');
+            });
+            displayExpr.textContent = visualExpr;
+
+            try {
+                let processedExpr = currentExpr.replace(/(\d+(\.\d+)?)!/g, (match, num) => {
+                    return factorial(Number(num.replace(/,/g, '')));
+                });
+                let tokens = tokenize(processedExpr);
+                let parser = new Parser(tokens, angleMode === "DEG");
+                let preview = parser.parse();
+                if (preview !== "" && preview !== undefined && !isNaN(preview)) {
+                    displayRes.textContent = formatResult(preview);
+                    displayRes.style.opacity = "0.7";
+                } else {
+                    if(!currentExpr) displayRes.textContent = "0";
+                }
+            } catch(e) {}
+            adjustFontSize();
+        }
+
+        function adjustFontSize() {
+            if(!displayRes) return;
+            
+            // 1. Reset inline size so CSS media queries dictate the natural max font size
+            displayRes.style.fontSize = '';
+            
+            let clientW = displayRes.clientWidth;
+            let scrollW = displayRes.scrollWidth;
+            
+            // 2. Mathematically calculate exact font size to prevent layout thrashing
+            if (scrollW > clientW && clientW > 0) {
+                let ratio = clientW / scrollW;
+                
+                // Read the computed base size (varies by screen size due to media queries)
+                let computedSizePx = parseFloat(window.getComputedStyle(displayRes).fontSize) || 80;
+                
+                // Add a small 0.95 multiplier to ensure it fits perfectly without rounding issues
+                let optimalSizePx = computedSizePx * ratio * 0.95;
+                
+                // Shrink down to a minimum of ~32px, then let it horizontally scroll
+                displayRes.style.fontSize = Math.max(32, optimalSizePx) + 'px';
+            }
+            
+            // 3. Auto-scroll to the right so newest numbers are always visible
+            requestAnimationFrame(() => {
+                displayRes.scrollLeft = displayRes.scrollWidth;
+                if(displayExpr) displayExpr.scrollLeft = displayExpr.scrollWidth;
+            });
+        }
+        window.addEventListener('resize', adjustFontSize);
+
+        function inputFunc(val) {
+            if(displayRes.style.color !== "var(--md-sys-color-on-surface)" && displayRes.textContent !== "0" && !currentExpr) {
+                if(/[0-9]/.test(val) || val === "sin(" || val === "cos(") currentExpr = "";
+                else currentExpr = ans.toString();
+            }
+            displayRes.style.color = "var(--md-sys-color-on-surface)";
+            
+            if (currentExpr === "0" && val === "0") {
+                return; // Prevent multiple leading zeroes
+            } else if (currentExpr === "0" && /[1-9]/.test(val)) {
+                currentExpr = val; // Replace isolated zero with the new number
+            } else if(val === '!') {
+                currentExpr += "!";
+            } else {
+                currentExpr += val;
+            }
+            
+            updateDisplay(); adjustFontSize();
+        }
+
+        function backspace() {
+            currentExpr = currentExpr.slice(0, -1);
+            updateDisplay(); adjustFontSize();
+        }
+
+        function clearAll() {
+            currentExpr = "";
+            displayRes.textContent = "0";
+            displayRes.style.opacity = "1";
+            displayRes.style.color = "var(--md-sys-color-on-surface)";
+            updateDisplay(); adjustFontSize();
+        }
+
+        function setAngleMode(mode) {
+            angleMode = mode;
+            updateAngleIndicator();
+        }
+
+        function updateAngleIndicator() { document.getElementById('angle-mode-indicator').textContent = angleMode; }
+
+        function formatResult(val) {
+            if(isNaN(val) || !isFinite(val)) return val;
+            let fixed = parseFloat(Number(val).toPrecision(12)).toString();
+            let parts = fixed.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join('.');
+        }
+
+        function calculate() {
+            if(!currentExpr) return;
+            try {
+                let processedExpr = currentExpr.replace(/(\d+(\.\d+)?)!/g, (match, num) => {
+                    return factorial(Number(num.replace(/,/g, '')));
+                });
+                let tokens = tokenize(processedExpr);
+                let parser = new Parser(tokens, angleMode === "DEG");
+                let result = parser.parse();
+                
+                if (result !== "" && result !== undefined) {
+                    ans = parseFloat(Number(result).toPrecision(12));
+                    displayRes.textContent = formatResult(ans);
+                    displayRes.style.opacity = "1";
+                    displayRes.style.color = "var(--md-sys-color-on-surface)";
+                    adjustFontSize();
+                    addToHistory(displayExpr.textContent, displayRes.textContent);
+                    currentExpr = ""; 
+                }
+            } catch (e) {
+                displayRes.textContent = e.message === "Syntax Error" ? "Error" : e.message;
+                displayRes.style.opacity = "1";
+                displayRes.style.color = "var(--md-sys-color-error)";
+                adjustFontSize();
+            }
+            updateDisplay();
+        }
+
+        function memoryAction(action) {
+            let currentVal = parseFloat(displayRes.textContent.replace(/,/g, ''));
+            if(isNaN(currentVal)) currentVal = 0;
+            switch(action) {
+                case 'MC': memory = 0; break;
+                case 'MR': currentExpr += memory; updateDisplay(); break;
+                case 'M+': memory += currentVal; break;
+                case 'M-': memory -= currentVal; break;
+            }
+            updateMemoryIndicator();
+        }
+        function updateMemoryIndicator() {
+            document.getElementById('memory-indicator').textContent = memory !== 0 ? `M=${formatResult(memory)}` : "";
+        }
+
+        function addToHistory(expr, res) {
+            history.unshift({ expr, res });
+            if(history.length > 50) history.pop();
+            localStorage.setItem('calc_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = "";
+            if (history.length === 0) {
+                list.innerHTML = `<div style="text-align: center; color: var(--md-sys-color-on-surface-variant); padding: 48px;">No calculations yet</div>`;
+                return;
+            }
+            history.forEach(item => {
+                const li = document.createElement('md-list-item');
+                li.innerHTML = `<div slot="headline" style="font-size: 1.5rem; color: var(--md-sys-color-on-surface); text-align: right;">${item.res}</div><div slot="supporting-text" style="font-size: 1.1rem; text-align: right;">${item.expr} =</div>`;
+                li.onclick = () => {
+                    currentExpr += item.res.replace(/,/g, '');
+                    updateDisplay();
+                    document.querySelector('.nav-item[data-target="calculator"]').click();
+                };
+                list.appendChild(li);
+            });
+        }
+        function clearHistory() { history = []; localStorage.removeItem('calc_history'); renderHistory(); }
+
+        const convData = {
+            "Length": { base: "m", units: { "m": 1, "cm": 0.01, "mm": 0.001, "km": 1000, "in": 0.0254, "ft": 0.3048, "yd": 0.9144, "mi": 1609.34 } },
+            "Mass": { base: "kg", units: { "kg": 1, "g": 0.001, "mg": 0.000001, "t": 1000, "oz": 0.0283495, "lb": 0.453592 } },
+            "Volume": { base: "l", units: { "l": 1, "ml": 0.001, "gal": 3.78541, "qt": 0.946353, "pt": 0.473176, "cup": 0.236588, "floz": 0.0295735 } },
+            "Time": { base: "s", units: { "ms": 0.001, "s": 1, "min": 60, "hr": 3600, "day": 86400, "wk": 604800 } },
+            "Digital": { base: "B", units: { "Bytes": 1, "KB": 1024, "MB": 1048576, "GB": 1073741824, "TB": 1099511627776 } },
+            "Area": { base: "sqm", units: { "Sq Meters": 1, "Sq KM": 1000000, "Sq Feet": 0.092903, "Acres": 4046.86, "Hectares": 10000 } },
+            "Speed": { base: "mps", units: { "m/s": 1, "km/h": 0.277778, "mph": 0.44704, "Knots": 0.514444 } }
+        };
+
+        // MWC Helper to safely build dropdown options
+        function buildMWCOptions(selectEl, optionsArr) {
+            selectEl.innerHTML = '';
+            optionsArr.forEach(val => {
+                const opt = document.createElement('md-select-option');
+                opt.value = val;
+                opt.innerHTML = `<div slot="headline">${val}</div>`;
+                selectEl.appendChild(opt);
+            });
+        }
+
+        function populateConvCategories() {
+            const catSelect = document.getElementById('conv-category');
+            const cats = ["Date", "Temperature", ...Object.keys(convData)];
+            buildMWCOptions(catSelect, cats);
+            requestAnimationFrame(() => {
+                catSelect.value = "Length";
+                handleCategoryChange();
+            });
+        }
+
+        function handleCategoryChange() {
+            const cat = document.getElementById('conv-category').value;
+            if(!cat) return;
+            if(cat === "Date") {
+                document.getElementById('standard-conv-ui').classList.add('hidden');
+                document.getElementById('date-conv-ui').classList.remove('hidden');
+                doDateConversion();
+            } else {
+                document.getElementById('standard-conv-ui').classList.remove('hidden');
+                document.getElementById('date-conv-ui').classList.add('hidden');
+                populateConvUnits(cat);
+            }
+        }
+
+        function populateConvUnits(cat) {
+            const fromSelect = document.getElementById('conv-unit-from');
+            const toSelect = document.getElementById('conv-unit-to');
+            let units = [];
+            if (cat === "Temperature") units = ["C", "F", "K", "R"];
+            else if (convData[cat]) units = Object.keys(convData[cat].units);
+            
+            buildMWCOptions(fromSelect, units);
+            buildMWCOptions(toSelect, units);
+            
+            requestAnimationFrame(() => {
+                if(units.length > 0) {
+                    fromSelect.value = units[0];
+                    toSelect.value = units[1] || units[0];
+                    doConversion();
+                }
+            });
+        }
+
+        function swapConvUnits() {
+            const from = document.getElementById('conv-unit-from');
+            const to = document.getElementById('conv-unit-to');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+            doConversion();
+        }
+
+        function doConversion() {
+            const cat = document.getElementById('conv-category').value;
+            const from = document.getElementById('conv-unit-from').value;
+            const to = document.getElementById('conv-unit-to').value;
+            const input = parseFloat(document.getElementById('conv-input').value);
+            const resBox = document.getElementById('conv-result');
+            
+            if (!from || !to) return;
+            if (isNaN(input)) { resBox.textContent = "0"; return; }
+            
+            if (cat === "Temperature") {
+                let c = input;
+                if(from === 'F') c = (input - 32) * 5/9;
+                if(from === 'K') c = input - 273.15;
+                if(from === 'R') c = (input - 491.67) * 5/9;
+                
+                let res = c;
+                if(to === 'F') res = (c * 9/5) + 32;
+                if(to === 'K') res = c + 273.15;
+                if(to === 'R') res = (c + 273.15) * 9/5;
+                resBox.textContent = formatResult(res);
+                return;
+            }
+            
+            if(convData[cat]) {
+                const baseVal = input * convData[cat].units[from];
+                const finalVal = baseVal / convData[cat].units[to];
+                resBox.textContent = formatResult(finalVal);
+            }
+        }
+
+        function doDateConversion() {
+            const d1 = new Date(document.getElementById('date-start').value);
+            const d2 = new Date(document.getElementById('date-end').value);
+            const resBox = document.getElementById('date-result');
+            if(isNaN(d1) || isNaN(d2)) { resBox.textContent = "Select valid dates"; return; }
+            
+            let start = d1 < d2 ? d1 : d2;
+            let end = d1 < d2 ? d2 : d1;
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+            let days = end.getDate() - start.getDate();
+            
+            if (days < 0) { months--; let prevMonth = new Date(end.getFullYear(), end.getMonth(), 0); days += prevMonth.getDate(); }
+            if (months < 0) { years--; months += 12; }
+            
+            const diffDaysTotal = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
+            
+            let parts = [];
+            if(years > 0) parts.push(`${years} yr`);
+            if(months > 0) parts.push(`${months} mo`);
+            if(days > 0) parts.push(`${days} day`);
+            
+            if (parts.length === 0) resBox.textContent = "Same day";
+            else resBox.innerHTML = `<div>${parts.join(', ')}</div><div style="font-size:1rem; opacity:0.7; margin-top:8px;">${formatResult(diffDaysTotal)} total days</div>`;
+        }
+
+        let exchangeRates = {};
+        async function fetchCurrencyRates(forceRefresh = false) {
+            const dateLabel = document.getElementById('currency-date');
+            const base = document.getElementById('curr-from').value || 'USD';
+            
+            if(!forceRefresh && exchangeRates[base]) { doCurrencyConversion(); return; }
+            try {
+                dateLabel.textContent = "Fetching live rates...";
+                const response = await fetch(`https://api.frankfurter.app/latest?from=${base}`);
+                if (!response.ok) throw new Error("Network error");
+                const data = await response.json();
+                exchangeRates[base] = data;
+                dateLabel.textContent = `Rates effective: ${data.date}`;
+                populateCurrencyDropdowns(base, data.rates);
+                doCurrencyConversion();
+            } catch (e) {
+                dateLabel.textContent = "Error fetching rates. Offline mode active.";
+            }
+        }
+
+        function populateCurrencyDropdowns(base, rates) {
+            const fromSelect = document.getElementById('curr-from');
+            const toSelect = document.getElementById('curr-to');
+            let prevFrom = fromSelect.value || 'USD';
+            let prevTo = toSelect.value || 'EUR';
+            
+            const currencies = [base, ...Object.keys(rates)].sort();
+            buildMWCOptions(fromSelect, currencies);
+            buildMWCOptions(toSelect, currencies);
+            
+            requestAnimationFrame(() => {
+                fromSelect.value = prevFrom;
+                toSelect.value = (prevTo !== prevFrom && currencies.includes(prevTo)) ? prevTo : currencies[1] || currencies[0];
+            });
+        }
+
+        function swapCurrencies() {
+            const from = document.getElementById('curr-from');
+            const to = document.getElementById('curr-to');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+            fetchCurrencyRates();
+        }
+
+        function doCurrencyConversion() {
+            const base = document.getElementById('curr-from').value;
+            const to = document.getElementById('curr-to').value;
+            const amount = parseFloat(document.getElementById('curr-input').value);
+            const resBox = document.getElementById('curr-result');
+            
+            if (!base || !to) return;
+            if (isNaN(amount) || amount === 0) { resBox.textContent = "0"; return; }
+            if (base === to) { resBox.textContent = amount; return; }
+            
+            if (exchangeRates[base] && exchangeRates[base].rates[to]) {
+                const rate = exchangeRates[base].rates[to];
+                let finalVal = (amount * rate).toFixed(2);
+                let parts = finalVal.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                resBox.textContent = parts.join('.') + " " + to;
+            }
+        }
+        // Init currency
+        fetchCurrencyRates();
+
+        let progBase = 10; let progCurrent = "0"; let progExpr = ""; let progPrev = null; let progOperator = null;
+        function setProgBase(base) {
+            progBase = base;
+            document.querySelectorAll('#programmer md-list-item').forEach(el => {
+                el.style.background = 'transparent'; el.style.borderRadius = '0';
+            });
+            const activeEl = document.getElementById('pb-' + base);
+            activeEl.style.background = 'var(--md-sys-color-secondary-container)';
+            activeEl.style.borderRadius = '16px';
+            
+            document.querySelectorAll('.prog-keypad md-filled-tonal-button').forEach(btn => btn.disabled = false);
+            if(base < 16) document.querySelectorAll('.prog-hex-only').forEach(btn => btn.disabled = true);
+            if(base < 10) document.querySelectorAll('.prog-nonoct').forEach(btn => btn.disabled = true);
+            if(base < 8) document.querySelectorAll('.prog-nonbin').forEach(btn => btn.disabled = true);
+            updateProgDisplays();
+        }
+        function updateProgDisplays() {
+            let decimalVal = isNaN(parseInt(progCurrent, progBase)) ? 0 : parseInt(progCurrent, progBase);
+            let u32 = decimalVal >>> 0;
+            document.getElementById('pv-16').textContent = u32.toString(16).toUpperCase();
+            document.getElementById('pv-10').textContent = decimalVal.toString(10);
+            document.getElementById('pv-8').textContent = u32.toString(8);
+            document.getElementById('pv-2').textContent = u32.toString(2);
+            document.getElementById('prog-result').textContent = progCurrent;
+            document.getElementById('prog-expression').textContent = progExpr;
+        }
+        function inputProg(val) {
+            if (progCurrent === "0") progCurrent = val; else progCurrent += val;
+            updateProgDisplays();
+        }
+        function progBackspace() {
+            progCurrent = progCurrent.slice(0, -1);
+            if(progCurrent === "" || progCurrent === "-") progCurrent = "0";
+            updateProgDisplays();
+        }
+        function progClear() { progCurrent = "0"; progPrev = null; progOperator = null; progExpr = ""; updateProgDisplays(); }
+        function progOp(op) {
+            let decimalVal = parseInt(progCurrent, progBase);
+            if (op === 'NOT') { progCurrent = (~decimalVal).toString(progBase).toUpperCase(); updateProgDisplays(); return; }
+            progPrev = decimalVal; progOperator = op; progExpr = progCurrent + " " + op; progCurrent = "0"; updateProgDisplays();
+        }
+        function progCalculate() {
+            if(progOperator === null || progPrev === null) return;
+            let currentDec = parseInt(progCurrent, progBase);
+            let res = 0;
+            switch(progOperator) {
+                case 'AND': res = progPrev & currentDec; break;
+                case 'OR': res = progPrev | currentDec; break;
+                case 'XOR': res = progPrev ^ currentDec; break;
+                case '<<': res = progPrev << currentDec; break;
+                case '>>': res = progPrev >> currentDec; break;
+            }
+            progCurrent = (res | 0).toString(progBase).toUpperCase(); 
+            progExpr = ""; progOperator = null; progPrev = null; updateProgDisplays();
+        }
+        setProgBase(10);
+
+        // Global Keyboard Support
+        document.addEventListener('keydown', (e) => {
+            if(document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'MD-OUTLINED-TEXT-FIELD') return;
+            const key = e.key;
+            if (/[0-9]/.test(key)) inputFunc(key);
+            if (['+', '-', '*', '/'].includes(key)) { e.preventDefault(); inputFunc(key); }
+            if (key === '.' || key === '(' || key === ')' || key === '^' || key === '%') inputFunc(key);
+            if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
+            if (key === 'Backspace') backspace();
+            if (key === 'Escape') clearAll();
+        });
+    </script>
+</body>
+</html>
